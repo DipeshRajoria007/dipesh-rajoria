@@ -116,7 +116,6 @@ ${chalk.cyan("Examples:")}
 }
 
 async function displayTitle() {
-  console.log("\n");
   const title = await new Promise((res, rej) => {
     figlet("Dipesh Rajoria", (err, data) => {
       if (err) rej(err);
@@ -125,7 +124,6 @@ async function displayTitle() {
   });
   console.log(theme.gradient(title));
   console.log("\n");
-  showMenu();
 }
 
 // About section
@@ -254,7 +252,7 @@ function exitCLI() {
 }
 
 // Interactive menu
-function showMenu() {
+async function showMenu() {
   inquirer
     .prompt([
       {
@@ -270,6 +268,9 @@ function showMenu() {
       },
     ])
     .then(async (answers) => {
+      console.clear();
+      await displayTitle();
+
       switch (answers.action) {
         case "🧑‍💻 About Me":
           await printAboutMe();
@@ -289,4 +290,6 @@ function showMenu() {
     });
 }
 
-displayTitle();
+// Initial display
+console.clear();
+displayTitle().then(showMenu);
