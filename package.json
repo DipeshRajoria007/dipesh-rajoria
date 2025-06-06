@@ -1,0 +1,25 @@
+{
+  "name": "dipesh-rajoria",
+  "version": "1.0.0",
+  "description": "A fun CLI portfolio for Dipesh Rajoria",
+  "bin": {
+    "dipesh-rajoria": "./bin/index.js"
+  },
+  "keywords": [
+    "cli",
+    "portfolio",
+    "developer",
+    "dipesh",
+    "interactive"
+  ],
+  "author": "Dipesh Rajoria",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "figlet": "^1.5.2",
+    "gradient-string": "^2.0.1",
+    "inquirer": "^9.2.8",
+    "boxen": "^7.0.0",
+    "ora": "^7.0.1"
+  }
+}
