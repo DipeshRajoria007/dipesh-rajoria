@@ -1,6 +1,6 @@
 {
   "name": "dipesh-rajoria",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A fun CLI portfolio for Dipesh Rajoria",
   "bin": {
     "dipesh-rajoria": "./bin/index.js"
