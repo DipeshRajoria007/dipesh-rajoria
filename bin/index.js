@@ -274,7 +274,7 @@ function showMenu() {
         case "❌ Exit":
           console.log(
             theme.accent(
-              "\n👋 I hope you enjoyed exploring my CLI portfolio! If you liked it, star me on GitHub: https://github.com/DipeshRajoria007 🚀\n"
+              "\n👋 I hope you enjoyed exploring my CLI portfolio! If you liked it, star me on GitHub: https://github.com/DipeshRajoria007/dipesh-rajoria 🚀\n"
             )
           );
           process.exit(0);
