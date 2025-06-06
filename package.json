@@ -15,11 +15,11 @@
   "author": "Dipesh Rajoria",
   "license": "MIT",
   "dependencies": {
-    "chalk": "^5.3.0",
+    "boxen": "^5.1.2",
+    "chalk": "^4.1.2",
     "figlet": "^1.5.2",
     "gradient-string": "^2.0.1",
-    "inquirer": "^9.2.8",
-    "boxen": "^7.0.0",
-    "ora": "^7.0.1"
+    "inquirer": "8.2.4",
+    "ora": "^5.4.1"
   }
 }

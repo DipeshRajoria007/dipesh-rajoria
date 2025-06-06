@@ -5,13 +5,11 @@ const figlet = require("figlet");
 const gradient = require("gradient-string");
 const inquirer = require("inquirer");
 const chalk = require("chalk");
-const boxen = require("boxen").default;
-const ora = require("ora").default;
+const boxen = require("boxen");
+const ora = require("ora");
 
-// Detect theme
 const isDarkMode = process.env.TERM_THEME === "light" ? false : true;
 
-// Define theme styles
 const theme = isDarkMode
   ? {
       primary: chalk.cyanBright,
@@ -35,40 +33,20 @@ if (args.includes("--help") || args.includes("-h")) {
 }
 
 if (args.includes("--about") || args.includes("-a")) {
-  printAboutMe();
-  process.exit(0);
+  printAboutMe().then(exitCLI);
+  return;
 }
 
 if (args.includes("--message") || args.includes("-m")) {
   printContactInfo();
-  process.exit(0);
+  exitCLI();
+  return;
 }
 
 if (args.includes("--collab") || args.includes("-c")) {
   printCollaborationInfo();
-  process.exit(0);
-}
-function showHelp() {
-  const helpText = `
-${chalk.bold("Dipesh Rajoria CLI Portfolio")}
-
-${chalk.cyan("Usage:")} npx dipesh-rajoria [options]
-
-${chalk.cyan("Options:")}
-  -h, --help           Show this help message
-  -a, --about          Display 'About Me' section
-  -m, --message        Show contact information
-  -c, --collab         Show GitHub/LinkedIn collaboration info (same as -m)
-
-If no options are passed, you'll get an interactive menu 🎛️
-
-${chalk.cyan("Examples:")}
-  npx dipesh-rajoria
-  npx dipesh-rajoria --about
-  npx dipesh-rajoria -m
-  npx dipesh-rajoria -c
-`;
-  console.log(helpText);
+  exitCLI();
+  return;
 }
 
 const dipesh = {
@@ -116,20 +94,41 @@ const dipesh = {
     "I once debugged a memory leak that saved 8+ re-renders per keystroke!",
 };
 
-function displayTitle() {
-  console.log("\n");
-  figlet("Dipesh Rajoria", (err, data) => {
-    if (err) {
-      console.log("Something went wrong...");
-      console.dir(err);
-      return;
-    }
-    console.log(theme.gradient.multiline(data));
-    console.log("\n");
-    showMenu();
-  });
+function showHelp() {
+  const helpText = `
+${chalk.bold("Dipesh Rajoria CLI Portfolio")}
+
+${chalk.cyan("Usage:")} npx dipesh-rajoria [options]
+
+${chalk.cyan("Options:")}
+  -h, --help           Show this help message
+  -a, --about          Display 'About Me' section
+  -m, --message        Show contact information
+  -c, --collab         Show GitHub/LinkedIn collaboration info
+
+${chalk.cyan("Examples:")}
+  npx dipesh-rajoria
+  npx dipesh-rajoria --about
+  npx dipesh-rajoria -m
+  npx dipesh-rajoria -c
+`;
+  console.log(helpText);
 }
 
+async function displayTitle() {
+  console.log("\n");
+  const title = await new Promise((res, rej) => {
+    figlet("Dipesh Rajoria", (err, data) => {
+      if (err) rej(err);
+      else res(data);
+    });
+  });
+  console.log(theme.gradient(title));
+  console.log("\n");
+  showMenu();
+}
+
+// About section
 async function printAboutMe() {
   const spinner = ora(theme.primary("Loading profile...")).start();
   await new Promise((r) => setTimeout(r, 600));
@@ -205,6 +204,7 @@ async function printAboutMe() {
   );
 }
 
+// Collaboration section
 function printCollaborationInfo() {
   console.log(
     boxen(theme.primary.bold("🤝 Let's Collaborate!"), {
@@ -224,6 +224,7 @@ function printCollaborationInfo() {
   );
 }
 
+// Contact section
 function printContactInfo() {
   console.log(
     boxen(theme.accent.bold("💬 Leave a Message"), {
@@ -242,6 +243,17 @@ function printContactInfo() {
   );
 }
 
+// Exit message
+function exitCLI() {
+  console.log(
+    theme.accent(
+      "\n👋 I hope you enjoyed exploring my CLI portfolio! If you liked it, star me on GitHub: https://github.com/DipeshRajoria007/dipesh-rajoria 🚀\n"
+    )
+  );
+  process.exit(0);
+}
+
+// Interactive menu
 function showMenu() {
   inquirer
     .prompt([
@@ -261,24 +273,19 @@ function showMenu() {
       switch (answers.action) {
         case "🧑‍💻 About Me":
           await printAboutMe();
-          showMenu();
           break;
         case "🤝 Let's Collaborate":
           printCollaborationInfo();
-          showMenu();
           break;
         case "💬 Leave a Message":
           printContactInfo();
-          showMenu();
           break;
         case "❌ Exit":
-          console.log(
-            theme.accent(
-              "\n👋 I hope you enjoyed exploring my CLI portfolio! If you liked it, star me on GitHub: https://github.com/DipeshRajoria007/dipesh-rajoria 🚀\n"
-            )
-          );
-          process.exit(0);
+          exitCLI();
+          return;
       }
+
+      showMenu(); // Loop again unless exiting
     });
 }
 
